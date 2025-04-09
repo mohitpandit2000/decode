@@ -11,6 +11,7 @@ public class HealthCheckControllerTest {
     @BeforeEach
     public void initialize(){
         System.out.println("initialization");
+        System.out.println("first commit");
     }
 
 }
