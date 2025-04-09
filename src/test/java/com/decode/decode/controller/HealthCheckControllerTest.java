@@ -10,12 +10,6 @@ public class HealthCheckControllerTest {
     }
     @BeforeEach
     public void initialize(){
-
-        System.out.println("initialization");
-        System.out.println("git change ");
-        System.out.println("first commit");
-        System.out.println("git second commit");
-        System.out.println("now will do rebase");
     }
 
 }
