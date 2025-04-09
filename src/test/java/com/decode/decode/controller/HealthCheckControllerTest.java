@@ -13,6 +13,8 @@ public class HealthCheckControllerTest {
 
         System.out.println("initialization");
         System.out.println("git change ");
+        System.out.println("first commit");
+        System.out.println("git second commit");
     }
 
 }
