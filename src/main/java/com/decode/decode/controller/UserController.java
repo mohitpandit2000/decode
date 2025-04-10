@@ -20,25 +20,14 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        try{
-            userService.add(user);
-            return new ResponseEntity<>(user,HttpStatus.CREATED);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUser(){
-        List<User> all = userService.getAll();
-        if(all!=null && !all.isEmpty()){
-            return  new ResponseEntity<>(all,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<User>> getAllUser(){
+//        List<User> all = userService.getAll();
+//        if(all!=null && !all.isEmpty()){
+//            return  new ResponseEntity<>(all,HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
 
 
     @PutMapping("/{userName}")

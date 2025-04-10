@@ -4,13 +4,12 @@ package com.decode.decode.service;
 import com.decode.decode.entity.JournalEntry;
 import com.decode.decode.entity.User;
 import com.decode.decode.repository.JournalEntryRepository;
-import com.decode.decode.repository.repository.UserEntryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +24,12 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
-    public void add(JournalEntry journalEntry,String userName) {
+    public void saveEntry(JournalEntry journalEntry) {
+            journalEntryRepository.save(journalEntry);
+    }
+
+
+    public void saveEntry(JournalEntry journalEntry,String userName) {
         try{
             User user = userService.findByUserName(userName);
             journalEntry.setDate(LocalDateTime.now());
@@ -35,6 +39,7 @@ public class JournalEntryService {
         }
         catch (Exception e){
             log.error("Exception"+ e);
+            throw new RuntimeException("an error occured while adding an entry");
         }
     }
 
@@ -46,7 +51,10 @@ public class JournalEntryService {
         return journalEntryRepository.findById(myId);
     }
 
-    public void deleteById(ObjectId myid) {
+    public void deleteById(ObjectId myid, String userName) {
+        User user = userService.findByUserName(userName);
+        user.getJournalEntryList().removeIf(x->x.getId().equals(myid));
+        userService.add(user);
         journalEntryRepository.deleteById(myid);
     }
 
