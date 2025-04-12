@@ -34,16 +34,19 @@ public class SpringSecurity {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/public").permitAll()
-                        .requestMatchers("/journal/**", "/login", "/default-ui.css").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
-
                 )
-                .formLogin(withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // For REST API
+                .httpBasic(withDefaults()) // ✅ Add this to allow basic auth
                 .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
+
+
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {

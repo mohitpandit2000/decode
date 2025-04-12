@@ -20,7 +20,7 @@ public class UserService {
     UserRepository userRepository;
     private static final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
-    public void add(User user) {
+    public void saveNewUser(User user) {
         try{
             userRepository.save(user);
         }
@@ -38,7 +38,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User  findByUserName(String username){
+    public User findByUserName(String username){
         return userRepository.findByUserName(username);
     }
 }
