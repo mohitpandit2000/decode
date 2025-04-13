@@ -1,10 +1,9 @@
 package com.decode.decode.controller;
 
-import com.decode.decode.entity.JournalEntry;
+import com.decode.decode.api.response.WeatherResponse;
 import com.decode.decode.entity.User;
-import com.decode.decode.service.JournalEntryService;
 import com.decode.decode.service.UserService;
-import org.bson.types.ObjectId;
+import com.decode.decode.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +11,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    WeatherService weatherService;
 
 //    @GetMapping
 //    public ResponseEntity<List<User>> getAllUser(){
@@ -43,5 +42,16 @@ public class UserController {
             userService.saveUser(userInDb);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
+        String greeting="";
+        if(weatherResponse!=null){
+            greeting=" ,weather feels like " + weatherResponse.getCurrent().getFeelslike();
+        }
+        return new ResponseEntity<>("Hi " + authentication.getName() + greeting,HttpStatus.OK);
     }
 }
