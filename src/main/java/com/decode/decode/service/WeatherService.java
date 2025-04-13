@@ -1,6 +1,8 @@
 package com.decode.decode.service;
 
 import com.decode.decode.api.response.WeatherResponse;
+import com.decode.decode.cache.AppCache;
+import com.decode.decode.constants.PlaceHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -13,13 +15,15 @@ public class WeatherService {
     @Value("${weather.api.key}")
     private  String apiKey;
 
-    private static final String API="http://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
-
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private AppCache appCache;
+
     public WeatherResponse getWeather(String city){
-        String finalApi = API.replace("CITY", city).replace("API_KEY", apiKey);
+        String finalApi = appCache.APP_CACHE.get(PlaceHolder.WEATHER_API.toString())
+                .replace(PlaceHolder.CITY.toString(), city).replace(PlaceHolder.APIKEY.toString(), apiKey);
         ResponseEntity<WeatherResponse> response =
                 restTemplate.exchange(finalApi, HttpMethod.GET, null, WeatherResponse.class);
         return response.getBody();

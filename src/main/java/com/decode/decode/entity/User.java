@@ -1,5 +1,6 @@
 package com.decode.decode.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Document("user")
 @Data
+@Builder
 public class User {
 
     @Id
@@ -27,5 +29,8 @@ public class User {
     private List<JournalEntry> journalEntryList=new ArrayList<>();
 
     private List<String> roles;
+
+    private String email;
+    private boolean sentimentAnalysis;
 
 }
